@@ -24,7 +24,7 @@ class Image:
     def solve_part_1(self):
         min_zeros = 1000
         min_layer = -1
-        
+
         for i in range(self.n_layers):
             zeros = self.find_number_occurences(i, "0")
             if zeros < min_zeros:
@@ -33,6 +33,16 @@ class Image:
 
         return self.find_number_occurences(min_layer, "1") * self.find_number_occurences(min_layer, "2")
         
+    def decode_image(self):
+        final_image = [-1] * (self.width*self.height)
+        current_layer = 0
+        while min(final_image) < 0 and current_layer < 100: #as long as we still have encoded pixels
+            for i in range(len(self.layers[current_layer])):
+                if final_image[i] < 0:
+                    if self.layers[current_layer][i] == "0" or self.layers[current_layer][i] == "1":
+                        final_image[i] = int(self.layers[current_layer][i])
+            current_layer +=1 
+        return final_image
 
 if __name__ == "__main__":
     with open(filename) as f:
@@ -40,4 +50,4 @@ if __name__ == "__main__":
 
     image = Image(25, 6, encoding)
     image.split_layers()
-    print(image.solve_part_1())
+    print(image.decode_image())
